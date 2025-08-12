@@ -38,6 +38,8 @@ class FieldBoard(BasicObject):
 
         self.field = [[None for j in range(self.field_x)] for i in range(self.field_y)]
 
+        logger.debug(f"FieldBoard instance {self} at {id(self)} state after initialization: {vars(self)}.")
+
         return None
 
     def __new__(cls, *args, **kwargs) -> BasicObject:
