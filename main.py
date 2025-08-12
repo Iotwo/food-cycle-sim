@@ -21,42 +21,42 @@ from classes.unit_corpse import UnitCorpse
 logger = logging.getLogger(__name__)
 dt_start = time.strftime("%Y%m%d-%H%M%S")
 logging.basicConfig(filename=f"applog_{dt_start}.log", encoding="utf-8", level=logging.DEBUG, 
-                    format="%(asctime)s:[%(levelname)s-%(levelno)s](module:%(module)s, file:%(filename)s, line:%(lineno)d, %(funcName)s) ||| %(message)s")
+                    format="%(asctime)s:[%(levelname)s-%(levelno)s](module:%(module)s, file:%(filename)s, line:%(lineno)d, %(funcName)s) || %(message)s")
 
 
 def _general_logger(method, *args, **kwargs):  # what type will it return?
-        """
-        DESCR: method used for debug purposses, does nothing but describes the execution
-        """
-        result = None
-        line = ""
-        def decoration(self, *args, **kwargs) -> None:
-            global result
-            global line
+    """
+    DESCR: method used for debug purposses, does nothing but describes the execution
+    """
+    result = None
+    line = ""
+    def decoration(self, *args, **kwargs) -> None:
+        global result
+        global line
 
-            line = "Object {obj} at {id} calling \"{mth}\" with args:{a}, and kwargs:{kw}." 
-            line = line.format(obj=self, id=id(self), mth=method.__name__, a=args, kw=kwargs)
+        line = "Object {obj} at {id} calling \"{mth}\" with args:{a}, and kwargs:{kw}." 
+        line = line.format(obj=self, id=id(self), mth=method.__name__, a=args, kw=kwargs)
+        #print(line)
+        logger.debug(line)
+        try:
+            result = method(self, *args, **kwargs)
+            line = "The result of {obj}.{mth} is: {r}."
+            line = line.format(obj=id(self), mth=method.__name__, r=result)
             #print(line)
             logger.debug(line)
-            try:
-                result = method(self, *args, **kwargs)
-                line = "The result of {obj}.{mth} is: {r}."
-                line = line.format(obj=id(self), mth=method.__name__, r=result)
-                #print(line)
-                logger.debug(line)
-            except Exception as e:
-                line = "Exception occured while executing {obj}.{mth}. " +\
-                       "Cause: {ex_ca} ; Class: {ex_cl} ; Context: {ex_co} ; Args: {ex_ar} ; Trace: {ex_tr}. " +\
-                       "None will be returned." 
-                line = line.format(obj=id(self), mth=method.__name__, ex_ca=e.__cause__, ex_cl=e.__class__,
-                                  ex_co=e.__context__, ex_ar=e.args, ex_tr=e.with_traceback)
-                #print(line)
-                logger.error(line)
-                result = None
-            
-            return result
+        except Exception as e:
+            line = "Exception occured while executing {obj}.{mth}. " +\
+                   "Cause: {ex_ca} ; Class: {ex_cl} ; Context: {ex_co} ; Args: {ex_ar} ; Trace: {ex_tr}. " +\
+                   "None will be returned." 
+            line = line.format(obj=id(self), mth=method.__name__, ex_ca=e.__cause__, ex_cl=e.__class__,
+                              ex_co=e.__context__, ex_ar=e.args, ex_tr=e.with_traceback)
+            #print(line)
+            logger.error(line)
+            result = None
         
-        return decoration
+        return result
+    
+    return decoration
 
 @_general_logger
 def gui_create_main_window(win_width: int, win_height: int, win_icon_path: str=None,) -> tkinter.Tk:
