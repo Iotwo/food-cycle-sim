@@ -20,14 +20,14 @@ class Lighter(BasicObject):
 
         self.tile = 'O'
 
+        logger.debug(f"Lighter instance {self} at {id(self)} state after initialization: {vars(self)}.")
+
         return None
 
     def __new__(cls, *args, **kwargs) -> BasicObject:
         instance = super(Lighter, cls).__new__(cls, *args, **kwargs)
 
         instance.power = None
-
-        logger.debug(f"Lighter instance {self} at {id(self)} state after initialization: {vars(self)}.")
 
         return instance
 
