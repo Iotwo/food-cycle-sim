@@ -3,10 +3,12 @@ The goal is to build simulator on basic components
 
 """
 
+import argparse
 import logging
 import sys
 import time
 import tkinter
+
 
 
 from classes.ground import Ground
@@ -230,7 +232,7 @@ def eng_populate_field(field: FieldBoard, creatures: list=None) -> None:
 
 
 if __name__ == '__main__':
-    logger.warning(f"Application started.")
+    logger.info(f"Application started.")
     logger.debug(f"Passed arguments: [{sys.argv}]")
 
     TUPLE_LIGHTER_PATH = ((0, 0,),(0, 1,),(0, 2,),(0, 3,),(0, 4,),
@@ -240,6 +242,8 @@ if __name__ == '__main__':
     STR_EXIT_SIGNAL = 'e'
     last_signal = ''
 
+    # LOAD PREDEFINED DATA IF NOTHING PASSED
+    #
     # PREPARE
     field = eng_create_field(5, 5, 3)
     eng_fill_field(field)
@@ -258,5 +262,7 @@ if __name__ == '__main__':
         print("signal", last_signal)
 
     
-    logger.warning(f"Simulation finished. Cleaning up.")
-    sys.exit(0)
+    logger.info(f"Simulation finished. Cleaning up.")
+    # CLEAN UP AND LEAVE
+
+sys.exit(0)
