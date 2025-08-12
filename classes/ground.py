@@ -30,6 +30,8 @@ class Ground(BasicObject):
 
         self.ground_type = 0
 
+        logger.debug(f"BasicObject instance {self} at {id(self)} state after initialization: {vars(self)}.")
+
         return None
 
     def __new__(cls, *args, **kwargs) -> BasicObject:
