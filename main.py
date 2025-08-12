@@ -5,6 +5,7 @@ The goal is to build simulator on basic components
 
 import argparse
 import logging
+import pathlib
 import sys
 import time
 import tkinter
@@ -58,6 +59,9 @@ def _general_logger(method, *args, **kwargs):  # what type will it return?
     
     return decoration
 
+
+### GUI methods
+
 @_general_logger
 def gui_create_main_window(win_width: int, win_height: int, win_icon_path: str=None,) -> tkinter.Tk:
     """
@@ -87,6 +91,7 @@ def gui_draw_field(screen:tkinter.Tk, field_pictogram: list) -> None:
     return None
 
 
+### ENGINE methods
 
 @_general_logger
 def eng_create_field(field_x: int, field_y: int, lighter_power: int, terrain_pattern: list=None) -> FieldBoard:
@@ -136,18 +141,23 @@ def eng_check_coordinates_withtin_field(position: tuple, field: FieldBoard) -> b
     ARGS:
         - position: tuple of two coordinates, x and y
         - field: FieldBoard object with coordinate collection within.
+    RETURN: True if position is within field, otherwise - False
     """
+
+    logger.debug(f"Passed arguments to check: {locals()}")
 
     result = True
 
     if position[1] < 0 or position[1] >= len(field.field):
-        logger.info(f"Passed value of Y, {position[1]}, is out of bounds [0, {len(field.field)}].")
+        logger.debug(f"Passed value of Y, {position[1]}, is out of bounds [0, {len(field.field)}].")
         result = False
     elif position[0] < 0 or position[0] >= len(field.field[position[1]]):
-        logger.info(f"Passed value of X, {position[1]}, is out of bounds [0, {len(field.field[position[1]])}.")
+        logger.debug(f"Passed value of X, {position[1]}, is out of bounds [0, {len(field.field[position[1]])}.")
         result = False
     else:
         pass
+
+    logger.debug(f"Passed value {position} is withing field boundaries.")
 
     return result
 
@@ -190,7 +200,7 @@ def eng_fill_field(field: FieldBoard, pattern: list=None) -> int:
     ARGS:
         - field: FieldBoard exemplar to be filled, 
                  it is a link-type so will be changed anyway
-        - pattern: fill field with custom ground blocks
+        - pattern: text symbol matrix, containing field imprinting.
     RETURN: count of spawned blocks
     NOTE: pattern usage not implemented yet
     """
@@ -231,9 +241,30 @@ def eng_populate_field(field: FieldBoard, creatures: list=None) -> None:
     return None
 
 
+### MISC methods
+
+@_general_logger
+def misc_parse_field_pattern(pattern_path: str) -> list:
+    """
+    DESCR: Loads and parses matrix into list of lists to produce field.
+    ARGS:
+        - pattern_path: Path to file with pattern
+    RETURN: parsed file as list of lists with cell symbols
+    """
+
+    field = []
+
+    # TODO
+
+    return field
+
+
+
 if __name__ == '__main__':
     logger.info(f"Application started.")
     logger.debug(f"Passed arguments: [{sys.argv}]")
+
+    #
 
     TUPLE_LIGHTER_PATH = ((0, 0,),(0, 1,),(0, 2,),(0, 3,),(0, 4,),
                           (1, 4,),(2, 4,),(3, 4,),(4, 4,),
