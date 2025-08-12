@@ -27,7 +27,7 @@ class Lighter(BasicObject):
 
         instance.power = None
 
-        logger.debug(f"BasicObject instance {self} at {id(self)} state after initialization: {vars(self)}.")
+        logger.debug(f"Lighter instance {self} at {id(self)} state after initialization: {vars(self)}.")
 
         return instance
 

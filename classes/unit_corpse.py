@@ -18,7 +18,7 @@ class UnitCorpse(BasicObject):
 
         self.tile = 'T'
 
-        logger.debug(f"BasicObject instance {self} at {id(self)} state after initialization: {vars(self)}.")
+        logger.debug(f"UnitCorpse instance {self} at {id(self)} state after initialization: {vars(self)}.")
 
         return None
 

@@ -50,7 +50,7 @@ class Producens(UnitCorpse):
 
         self.tile = 'P'
 
-        logger.debug(f"BasicObject instance {self} at {id(self)} state after initialization: {vars(self)}.")
+        logger.debug(f"Producens instance {self} at {id(self)} state after initialization: {vars(self)}.")
 
         return None
 
