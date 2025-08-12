@@ -56,6 +56,8 @@ class BasicObject(object):
         self.x = position_x
         self.y = position_y
 
+        logger.debug(f"BasicObject instance {self} at {id(self)} state after initialization: {vars(self)}.")
+
         return None
 
     @_general_logger
