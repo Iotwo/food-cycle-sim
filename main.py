@@ -135,7 +135,7 @@ def eng_move_lighter_on_field(field: FieldBoard, moving_pattern: list) -> None:
 
 
 @_general_logger
-def eng_check_coordinates_withtin_field(position: tuple, field: FieldBoard) -> bool:
+def eng_check_coordinates_withtin_field(field: FieldBoard, position: tuple) -> bool:
     """
     DESCR: check that given coordinates are within given boundaries
     ARGS:
@@ -162,7 +162,7 @@ def eng_check_coordinates_withtin_field(position: tuple, field: FieldBoard) -> b
     return result
 
 @_general_logger
-def eng_check_choosen_object_is_a_cell(position: tuple, field: FieldBoard) -> bool:
+def eng_check_choosen_object_is_a_cell(field: FieldBoard, position: tuple) -> bool:
     """
     """
 
@@ -175,23 +175,45 @@ def eng_check_choosen_object_is_a_cell(position: tuple, field: FieldBoard) -> bo
     return result
 
 @_general_logger
-def eng_check_field_cell_not_occupied(position: tuple, field: FieldBoard) -> bool:
+def eng_check_field_cell_not_occupied(field: FieldBoard, position: tuple) -> bool:
     """
     DESCR: Checks if target cell attribute is_occupied
     ARGS:
-        - cell_pos: cell position (x, y)
         - field: FieldBoard used in model
+        - position: cell position (x, y)
     RETURN: True - if is_occupied is False, False otherwise
     """
 
     result = True
 
     if field.field[position[1]][position[0]] is None:
-        logger.info(f"Given position, ({position[0]},{position[1]}) is None")
+        logger.info(f"Given position, ({position[0]},{position[1]}) is None.")
         return False
     result = not field.field[cell_pos[1]][cell_pos[0]].is_occupied
     
     return result
+
+@_general_logger
+def eng_check_unit_is_not_corpse(unit:UnitCorpse) -> bool:
+    """
+    DESCR: Performing check on a passed unit. 
+           Checking current unit.health_value and unit.life_state.
+    ARGS:
+        - unit: UnitCorpse or derived type object
+    RETURN: True - if neither unit.health_value <= 0 nor unit.life_state is "dead".
+    """
+
+    logging.debug(f"Performing check on unit {unit} at {id(unit)}.")
+
+    if unit.get_life_state() == "dead":
+        logging.debug(f"Unit {id(unit)} state is \"dead\", unit counted as corpse.")
+        return False
+    if unit.get_health_value() <= 0:
+        logging.debug(f"Unit {id(unit)} current health value less or equall zero, unit counted as corpse.")
+        return False
+
+    logger.debug(f"Unit {id(unit)} is not corpse.")
+    return True
 
 @_general_logger
 def eng_fill_field(field: FieldBoard, pattern: list=None) -> int:
@@ -207,8 +229,9 @@ def eng_fill_field(field: FieldBoard, pattern: list=None) -> int:
     blocks_count = 0
 
     if pattern is not None:
-        pass
+        logger.info(f"No pattern passed to method.")
     else:
+        logger.info(f"Processing passed pattern - {id(pattern)} - on field {id(field)}.")
         for y in range(field.field_y):
             for x in range(field.field_x):
                 field.field[y][x] = Ground(x, y)
@@ -220,21 +243,37 @@ def eng_fill_field(field: FieldBoard, pattern: list=None) -> int:
 def eng_get_unit_view(field: FieldBoard, unit: UnitCorpse) -> list:
     """
     DESCR: Get subselection of field to represent unit point of view
+    ARGS:
+        - field: FieldBoard used in model 
     """
+
+    logger.info(f"Performing basic checks on unit {unit} at {id(unit)}.")
+    if eng_check_unit_is_not_corpse(unit) is False:
+        logger.debug(f"Not-corpse check failed. Corpse's FoW is emtpy.")
+        return []
+
+    view_dist = unit.get_sight_value()
+    # TODO: 
+
+
     return []
 
 @_general_logger
-def eng_move_unit_on_field() -> None:
+def eng_move_unit_on_field(creature) -> None:
+    
+
     return None
 
 @_general_logger
 def eng_populate_field(field: FieldBoard, creatures: list=None) -> None:
 
     if creatures is None:
+        logger.info(f"Creatures list not passed ({id(creatures)}). Using default population scheme.")
         creatures = [
             Producens(0, 0),
         ]
 
+    logger.info(f"Populating field {id(field)}.")
     for unit in creatures:
         field.add_creature(unit)
 
@@ -278,7 +317,7 @@ if __name__ == '__main__':
     # PREPARE
     field = eng_create_field(5, 5, 3)
     eng_fill_field(field)
-    # populate field
+    eng_populate_field(field)
 
     # CYCLE
     #main = gui_create_main_window(640, 480)
