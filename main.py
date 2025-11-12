@@ -296,7 +296,60 @@ def misc_parse_field_pattern(pattern_path: str) -> list:
 
     return field
 
+@_general_logger
+def misc_find_and_read_pattern_file(pattern_path: pathlib.Path) -> str:
+    """
+    DESCR: Checks for existense, availability and can this file be read. Then 
+           Then loads file contents into the program as-is. No formatting applied.
+    REQ: pathlib
+    ARGS:
+        - pattern_path: string containing absolute path to UTF-8 file with pattern data.
+    RETURN: string representation of file contents.
+    """
 
+    logger.debug(f"Performing basic checks on passed path {pattern_path} ({id(pattern_path)}).")
+    pattern_data = ""
+
+    if len(str(pattern_path)) == 0:
+        logger.info(f"Passed path ({id(pattern_path)}) has zero length. Aborting.")
+        return pattern_data
+
+    if pathlib.Path.exists(pattern_path) is False:
+        logger.info(f"Passed path \"{pattern_path}\" ({id(pattern_path)}) does not exist. Aborting.")
+        return pattern_data
+
+    if pathlib.Path.is_file() is False:
+        logger.info(f"Passed path \"{pattern_path}\" ({id(pattern_path)}) is not a file. Aborting.")
+        return pattern_data
+
+    try:
+        logger.debug(f"Trying to read file \"{pattern_path}\"...")
+        with open(file=pattern_path, mode='rt', encoding='utf-8', errors='strict') as f:
+            pattern_data = f.read()
+    except ValueError as ex:
+        logger.warning(f"An error occured while red pattern file at path \"{pattern_path}\" was processed. Aborting.")
+        pattern_data = ""
+        return pattern_data
+    except OSError as ex:
+        logger.warning(f"An error occured on accessing pattern file at path \"{pattern_path}\" was processed. Aborting.")
+        pattern_data = ""
+        return pattern_data
+    except Exception as ex:
+        logger.warning(f"Unknown exception occured on access pattern file at path \"{pattern_path}\" was processed. Aborting.")
+        pattern_data = ""
+        return pattern_data
+
+
+    logger.debug(f"File \"{pattern_path}\" red. It contains {len(pattern_data)} symbols.")
+    logger.info(f"File \"{pattern_path}\" is being red.")
+
+    return pattern_data
+
+### MAIN FUNCTION
+
+@_general_logger
+def main_loop() -> None:
+    return None
 
 if __name__ == '__main__':
     logger.info(f"Application started.")
@@ -314,6 +367,9 @@ if __name__ == '__main__':
     # LOAD PREDEFINED DATA IF NOTHING PASSED
     #
     # PREPARE
+    p = "D:\\Projects\\Python\\food-cycle-sim\\data\\presets\\field\\field-pattern-1.txt"
+    result = misc_find_and_read_pattern_file(p)
+    print(result)
     field = eng_create_field(5, 5, 3)
     eng_fill_field(field)
     eng_populate_field(field)
