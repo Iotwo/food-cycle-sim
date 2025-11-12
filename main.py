@@ -321,7 +321,7 @@ def misc_find_and_read_pattern_file(pattern_path: pathlib.Path) -> str:
         logger.info(f"Passed path \"{pattern_path}\" ({id(pattern_path)}) does not exist. Aborting.")
         return pattern_data
 
-    if pathlib.Path.is_file() is False:
+    if pathlib.Path.is_file(pattern_path) is False:
         logger.info(f"Passed path \"{pattern_path}\" ({id(pattern_path)}) is not a file. Aborting.")
         return pattern_data
 
@@ -355,7 +355,7 @@ def main_loop() -> None:
     return None
 
 if __name__ == '__main__':
-    logger.info(f"Application started.")
+    logger.critical(f"Application started.")
     logger.debug(f"Passed arguments: [{sys.argv}]")
 
     #
@@ -370,7 +370,7 @@ if __name__ == '__main__':
     # LOAD PREDEFINED DATA IF NOTHING PASSED
     #
     # PREPARE
-    p = "D:\\Projects\\Python\\food-cycle-sim\\data\\presets\\field\\field-pattern-1.txt"
+    p = pathlib.Path("D:\\Projects\\Python\\food-cycle-sim\\data\\presets\\field\\field-pattern-1.txt")
     result = misc_find_and_read_pattern_file(p)
     print(result)
     result = misc_parse_field_pattern(result)
