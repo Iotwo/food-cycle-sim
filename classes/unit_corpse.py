@@ -131,6 +131,14 @@ class UnitCorpse(BasicObject):
         return self.generation
 
     @BasicObject._general_logger
+    def get_life_state(self,) -> str:
+        """
+        DESCR: Get ground type of this block.
+        """
+
+        return self.life_state
+
+    @BasicObject._general_logger
     def get_moving_speed(self,) -> int:
         """
         DESCR: Get ground type of this block.
@@ -157,6 +165,10 @@ class UnitCorpse(BasicObject):
     @BasicObject._general_logger
     def get_reproduce_switch(self) -> bool:
         return self.is_ready_to_reproduce
+
+    @BasicObject._general_logger
+    def get_sight_value(self,) -> int:
+        return self.sight_value
 
     @BasicObject._general_logger
     def consume(self,) -> None:
