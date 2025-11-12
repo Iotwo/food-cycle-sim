@@ -11,7 +11,6 @@ import time
 import tkinter
 
 
-
 from classes.ground import Ground
 from classes.field_board import FieldBoard
 from classes.lighter import Lighter
@@ -319,8 +318,8 @@ if __name__ == '__main__':
     eng_fill_field(field)
     eng_populate_field(field)
 
-    # CYCLE
     #main = gui_create_main_window(640, 480)
+    # CYCLE
     #main.mainloop()
     while last_signal.lower() != STR_EXIT_SIGNAL:
         print('cycle')
