@@ -282,17 +282,20 @@ def eng_populate_field(field: FieldBoard, creatures: list=None) -> None:
 ### MISC methods
 
 @_general_logger
-def misc_parse_field_pattern(pattern_path: str) -> list:
+def misc_parse_field_pattern(pattern: str) -> list:
     """
     DESCR: Loads and parses matrix into list of lists to produce field.
     ARGS:
         - pattern_path: Path to file with pattern
-    RETURN: parsed file as list of lists with cell symbols
+    RETURN: parsed pattern as list of lists with cell symbols
     """
+    logger.debug(f"Reading pattern...")
+    logger.debug(f"{pattern}")
 
-    field = []
+    field = [list(line) for line in pattern.split('\n')]
 
-    # TODO
+    logger.debug(f"Pattern processed as next structure.")
+    logger.debug(f"{field}")
 
     return field
 
@@ -369,6 +372,8 @@ if __name__ == '__main__':
     # PREPARE
     p = "D:\\Projects\\Python\\food-cycle-sim\\data\\presets\\field\\field-pattern-1.txt"
     result = misc_find_and_read_pattern_file(p)
+    print(result)
+    result = misc_parse_field_pattern(result)
     print(result)
     field = eng_create_field(5, 5, 3)
     eng_fill_field(field)
