@@ -128,7 +128,7 @@ def eng_move_lighter_on_field(field: FieldBoard, moving_pattern: list) -> None:
             logger.debug(f"New index of fragment from moving pattern at {id(moving_pattern)} is {ligter_new_pos}")
             field.lighter.set_position(moving_pattern[ligter_new_pos][0], moving_pattern[ligter_new_pos][1])
             logger.debug(f"New set of coordinates for FieldBoard.Lighter at {id(field.lighter)} is: {moving_pattern[ligter_new_pos]}")
-            break
+            break  # bad!
 
     return None
 
@@ -215,7 +215,7 @@ def eng_check_unit_is_not_corpse(unit:UnitCorpse) -> bool:
     return True
 
 @_general_logger
-def eng_fill_field(field: FieldBoard, pattern: list=None) -> int:
+def eng_fill_field(field: FieldBoard, pattern: list=None, field_mapping: dict) -> int:
     """
     DESCR: fills FieldBoard exemplar with ground blocks
     ARGS:
@@ -227,13 +227,13 @@ def eng_fill_field(field: FieldBoard, pattern: list=None) -> int:
     """
     blocks_count = 0
 
-    if pattern is not None:
+    if pattern is None:
         logger.info(f"No pattern passed to method.")
     else:
         logger.info(f"Processing passed pattern - {id(pattern)} - on field {id(field)}.")
         for y in range(field.field_y):
             for x in range(field.field_x):
-                field.field[y][x] = Ground(x, y)
+                field.field[y][x] = Ground(x, y)  # replace with pattern-matching
                 blocks_count += 1
 
     return blocks_count
@@ -284,7 +284,7 @@ def eng_populate_field(field: FieldBoard, creatures: list=None) -> None:
 @_general_logger
 def misc_parse_field_pattern(pattern: str) -> list:
     """
-    DESCR: Loads and parses matrix into list of lists to produce field.
+    DESCR: Transforms raw-string pattern into python lists.
     ARGS:
         - pattern_path: Path to file with pattern
     RETURN: parsed pattern as list of lists with cell symbols
@@ -364,6 +364,7 @@ if __name__ == '__main__':
                           (1, 4,),(2, 4,),(3, 4,),(4, 4,),
                           (4, 3,),(4, 2,),(4, 1,),(4, 0,),
                           (3, 0,),(2, 0,),(1, 0,),)
+    DICT_FIELD_MAPPING = {}
     STR_EXIT_SIGNAL = 'e'
     last_signal = ''
 
@@ -376,7 +377,7 @@ if __name__ == '__main__':
     result = misc_parse_field_pattern(result)
     print(result)
     field = eng_create_field(5, 5, 3)
-    eng_fill_field(field)
+    eng_fill_field(field, result, DICT_FIELD_MAPPING)
     eng_populate_field(field)
 
     #main = gui_create_main_window(640, 480)
