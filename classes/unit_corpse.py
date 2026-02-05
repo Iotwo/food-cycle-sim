@@ -163,6 +163,10 @@ class UnitCorpse(BasicObject):
         return self.hunger_value
 
     @BasicObject._general_logger
+    def get_position(self) -> tuple:
+        return (self.x, self.y,)
+
+    @BasicObject._general_logger
     def get_reproduce_switch(self) -> bool:
         return self.is_ready_to_reproduce
 
