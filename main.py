@@ -136,7 +136,7 @@ def eng_move_lighter_on_field(field: FieldBoard, moving_pattern: list) -> None:
 @_general_logger
 def eng_check_coordinates_withtin_field(field: FieldBoard, position: tuple) -> bool:
     """
-    DESCR: check that given coordinates are within given boundaries
+    DESCR: check that given coordinates are within given boundaries.
     ARGS:
         - position: tuple of two coordinates, x and y
         - field: FieldBoard object with coordinate collection within.
@@ -145,12 +145,14 @@ def eng_check_coordinates_withtin_field(field: FieldBoard, position: tuple) -> b
 
     logger.debug(f"Passed arguments to check: {locals()}")
 
+    field_x, field_y = field.get_field_size()
+
     result = True
 
-    if position[1] < 0 or position[1] >= len(field.field):
+    if position[1] < 0 or position[1] >= field_y:
         logger.debug(f"Passed value of Y, {position[1]}, is out of bounds [0, {len(field.field)}].")
         result = False
-    elif position[0] < 0 or position[0] >= len(field.field[position[1]]):
+    elif position[0] < 0 or position[0] >= field_x:
         logger.debug(f"Passed value of X, {position[1]}, is out of bounds [0, {len(field.field[position[1]])}.")
         result = False
     else:
