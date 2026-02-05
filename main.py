@@ -251,18 +251,33 @@ def eng_get_unit_view(field: FieldBoard, unit: UnitCorpse) -> list:
     DESCR: Get subselection of field to represent unit point of view
     ARGS:
         - field: FieldBoard used in model 
+        - unit: object on field, which FoV will be acquired
+    RETURN: copy of field subsample as unit FoV
     """
+
+    fov = []
 
     logger.info(f"Performing basic checks on unit {unit} at {id(unit)}.")
     if eng_check_unit_is_not_corpse(unit) is False:
-        logger.debug(f"Not-corpse check failed. Corpse's FoW is emtpy.")
+        logger.debug(f"Not-corpse check failed. Corpse's FoV is emtpy.")
         return []
 
     view_dist = unit.get_sight_value()
-    # TODO: 
 
+    field_x, field_y = field.get_field_size()
+    unit_pos_x, unit_pos_y = unit.get_position()
 
-    return []
+    fov_y_t = unit_pos_y - view_dist if (unit_pos_y - view_dist > 0) else 0
+    fov_y_b = unit_pos_y + view_dist if (unit_pos_y + view_dist < field_y) else field_y
+    fov_x_l = unit_pos_x - view_dist if (unit_pos_x - view_dist > 0) else 0
+    fov_x_r = unit_pos_x + view_dist if (unit_pos_x + view_dist < field_x) else field_x
+
+    for i in range(fov_y_t, fov_y_b):
+        fov.append([])
+        for j in range(fov_x_l, fov_x_r):
+            fov[-1].append(field.field[i][j])  # may be link to field cell be better
+
+    return fov
 
 @_general_logger
 def eng_move_unit_on_field(creature) -> None:
