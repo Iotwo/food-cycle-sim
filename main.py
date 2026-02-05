@@ -285,19 +285,19 @@ def eng_populate_field(field: FieldBoard, creatures: list=None) -> None:
 
     return None
 
-@BasicObject._general_logger
-def _get_euclidean_distance_between_blocks(self, block_1: Ground, block_2: Ground) -> float:
+@._general_logger
+def eng_get_euclidean_distance_between_blocks(self, block_1: Ground, block_2: Ground) -> float:
     return 0.0
 
 @_general_logger
-def _get_manhattan_distance_between_blocks(self, block_1: Ground, block_2: Ground) -> int:
+def eng_get_manhattan_distance_between_blocks(self, block_1: Ground, block_2: Ground) -> int:
     dist_x = abs(block_1.x - block_2.x)
     dist_y = abs(block_1.y - block_2.y)
 
     return dist_x + dist_y
 
 @_general_logger
-def _get_rounded_euclidean_distance_between_block_and_lighter(self, block: Ground) -> int:
+def eng_get_rounded_euclidean_distance_between_block_and_lighter(self, block: Ground) -> int:
     """
     DESCR: Gets Euclid's distance between self.lighter and passed block from self.field
     ARGS:
@@ -311,7 +311,7 @@ def _get_rounded_euclidean_distance_between_block_and_lighter(self, block: Groun
     return 0
 
 @_general_logger
-def _get_manhattan_distance_between_block_and_lighter(self, block: Ground) -> int:
+def eng_get_manhattan_distance_between_block_and_lighter(self, block: Ground) -> int:
     """
     DESCR: Gets Manhattans distance between self.lighter and passed block from self.field
     ARGS:
@@ -324,7 +324,7 @@ def _get_manhattan_distance_between_block_and_lighter(self, block: Ground) -> in
     return dist_x + dist_y
 
 @_general_logger
-def _calculate_light_radiation(self, distance: int) -> int:
+def eng_calculate_light_radiation(self, distance: int) -> int:
     """
     DESCR: calculate lumination value of self.lighter at passed distance radius
     ARGS:
