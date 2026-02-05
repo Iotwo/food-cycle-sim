@@ -165,6 +165,11 @@ def eng_check_coordinates_withtin_field(field: FieldBoard, position: tuple) -> b
 @_general_logger
 def eng_check_choosen_object_is_a_cell(field: FieldBoard, position: tuple) -> bool:
     """
+    DESCR: checks that selected position on FieldBoard is a field cell
+    ARGS:
+        - field: FieldBoard object with coordinate collection within.
+        - position: tuple of two coordinates, x and y
+    RETURN: True if position is a cell, otherwise - False
     """
 
     result = True
