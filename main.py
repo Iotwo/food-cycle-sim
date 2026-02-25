@@ -377,6 +377,35 @@ def eng_unit_remove_from_field(field: FieldBoard, position: tuple, unit_registry
                     also inherit X and Y
         - unit_registry: struct for units state keeping
     """
+    i = 0
+
+    logger.debug(f"Performing basic checks of passed arguments.")
+    if unit_registry is None:
+        logger.info(f"Unit registry not found. Units' states cannot be updated.")
+        return None
+    if eng_check_coordinates_withtin_field(field, position) is False:
+        logger.info(f"Passed position ({position}) was out of bounds. Aborting procedure.")
+        return unit_registry
+    logger.debug(f"Updating field...")
+    if eng_check_field_cell_not_occupied(field, position) is True:
+        logger.info(f"Position {position} at {id(field.field[position[1]][position[0]])} is already free.")
+        return unit_registry
+    logger.debug(f"Checks passed.")
+
+    logger.debug(f"Searching unit to remove from model using position.")
+    unit_found_marker = False
+    for i in range(len(unit_registry["units"])):
+        if unit.get_position() == position:
+            logger.debug(f"Unit at position {position} exists. Index in list = {i}")
+            unit_found_marker = True
+            break
+    if unit_found_marker is False:
+        logger.info(f"Unit with position {position} not found.")
+        return unit_registry
+    logger.debug(f"Removing unit...")
+    unit_registry["units"].pop(i)
+    unit_registry["units_count"] -= 1
+    logger.debug(f"Unit removed. Unit registry updated")
 
     return unit_registry
 
