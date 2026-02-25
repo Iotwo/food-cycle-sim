@@ -73,6 +73,9 @@ class FieldBoard(BasicObject):
 
     @BasicObject._general_logger
     def add_creature(self, creature: UnitCorpse) -> None:
+        """
+        NOTE: will be deprecated
+        """
 
         self.creatures.append(creature)
         logger.debug(f"{self} at {id(self)} added new creature {id(creature)} of type {type(creature)} to FieldBoard.creatures. Creatures total: {len(self.creatures)}")
@@ -123,6 +126,10 @@ class FieldBoard(BasicObject):
 
     @BasicObject._general_logger
     def remove_creature(self, creature_id: int) -> None:
+        """
+        NOTE: will be deprecated
+        """
+        
         if (creature_id < 0 or creature_id >= len(self.creatures)):
             logger.info(f"Method \"FieldBoard.remove_creature\" called with argument \"creature_id\" out of bounds: {creature_id}. Removing aborted.")
             return None
