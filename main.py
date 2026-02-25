@@ -62,7 +62,7 @@ def _general_logger(method, *args, **kwargs):  # what type will it return?
 ### GUI methods
 
 @_general_logger
-def gui_create_main_window(win_width: int, win_height: int, win_icon_path: str=None,) -> tkinter.Tk:
+def gui_main_window_create(win_width: int, win_height: int, win_icon_path: str=None,) -> tkinter.Tk:
     """
     DESCR: Create main window of the application.
     """
@@ -80,7 +80,7 @@ def gui_create_main_window(win_width: int, win_height: int, win_icon_path: str=N
     return win_main
 
 @_general_logger
-def gui_draw_field(screen:tkinter.Tk, field_pictogram: list) -> None:
+def gui_field_draw(screen:tkinter.Tk, field_pictogram: list) -> None:
     """
     DESCR: Draws field in tk widget according to passed pictogram
     ARGS:
