@@ -21,7 +21,7 @@ from classes.unit_corpse import UnitCorpse
 logger = logging.getLogger(__name__)
 dt_start = time.strftime("%Y%m%d-%H%M%S")
 logging.basicConfig(filename=f"applog_{dt_start}.log", encoding="utf-8", level=logging.DEBUG, 
-                    format="%(asctime)s:[%(levelname)s-%(levelno)s](module:%(module)s, file:%(filename)s, line:%(lineno)d, %(funcName)s) || %(message)s")
+                    format="%(asctime)s:[%(levelname)s-%(levelno)s](module:%(module)s, file:%(filename)s, method:%(funcName)s, line:%(lineno)d): %(message)s")
 
 
 def _general_logger(method, *args, **kwargs):  # what type will it return?
