@@ -180,6 +180,26 @@ def eng_check_unit_is_not_corpse(unit:UnitCorpse) -> bool:
     logger.debug(f"Unit {id(unit)} is not corpse.")
     return True
 
+@_general_logger
+def eng_check_unit_type_exists(str: unit_type) -> bool:
+    """
+    DESCR: check if passed unit type exist in project.
+    ARGS:
+        - unit_type: a type to be chekced
+    RETURN: True - if type exists among types, False otherwise.
+    """
+
+    logger.debug(f"Passed arguments to check: {locals()}")
+
+    available_types = (UnitCorpse.__name__, Producens.__name__)
+
+    if unit_type in (available_types):
+        logger.debug(f"Unit type \"{unit_type}\" is among available types.")
+        return True
+    else:
+        logger.debug(f"Unit type \"{unit_type}\" not present among available types: {available_types}.")
+        return False
+
 
 @_general_logger
 def eng_field_create(field_x: int, field_y: int, lighter_power: int, terrain_pattern: list=None) -> FieldBoard:
@@ -278,11 +298,14 @@ def eng_unit_add_to_field(field: FieldBoard, position: tuple, unit_type: str, un
         return None
     if eng_check_coordinates_withtin_field(field, position) is False:
         logger.info(f"Passed position ({position}) was out of bounds. Aborting procedure.")
-        return None
+        return unit_registry
+    if eng_check_unit_type_exists(unit_type) is False:
+        logger.info(f"Unit type not found.")
+        return unit_registry
     logger.debug(f"Updating field...")
     if eng_check_field_cell_not_occupied(field, position) is False:
         logger.info(f"Position {position} at {id(field.field[position[1]][position[0]])} is occupied on field.")
-        return None
+        return unit_registry
     logger.debug(f"Checks passed.")
 
     logger.debug(f"Adding new unit to registry...")
