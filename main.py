@@ -112,6 +112,17 @@ def eng_create_field(field_x: int, field_y: int, lighter_power: int, terrain_pat
     return instance
 
 @_general_logger
+def eng_create_units_dict() -> dict:
+    """
+    DESCR: Create structure which keeps creature states and keeps track on active ones
+    RETURN: empty data structure for creature control
+    """
+
+    creatures = {count: 0, units:[]}
+
+    return creatures
+
+@_general_logger
 def eng_move_lighter_on_field(field: FieldBoard, moving_pattern: list) -> None:
     """
     DESCR: Method changes coordinates of object Lighter, imnitating it's movement around the field
