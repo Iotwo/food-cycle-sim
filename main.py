@@ -301,7 +301,7 @@ def eng_unit_move_on_field(creature) -> None:
     return None
 
 @_general_logger
-def eng_units_dict_create() -> dict:
+def eng_units_create_dict() -> dict:
     """
     DESCR: Create structure which keeps creature states and keeps track on active ones
     RETURN: empty data structure for creature control
