@@ -93,58 +93,6 @@ def gui_field_draw(screen:tkinter.Tk, field_pictogram: list) -> None:
 ### ENGINE methods
 
 @_general_logger
-def eng_create_field(field_x: int, field_y: int, lighter_power: int, terrain_pattern: list=None) -> FieldBoard:
-    """
-    DESCR: Create field board of exact size and populate it with blocks of terrain
-    ARGS:
-        - field_x: horizontal field size
-        - field_y: vertical field size
-        - lighter_power: attached to field lighter's power
-    RETURN: exemplar of class FieldBoard, with initiated field and lighter
-    """
-
-    logger.debug(f"Creating field {field_x}X{field_y}")
-    instance = FieldBoard(field_x, field_y)
-
-    logger.debug(f"Adding lighter with power {lighter_power}.")
-    instance.set_lighter(Lighter(0, 0, lighter_power))
-
-    return instance
-
-@_general_logger
-def eng_create_units_dict() -> dict:
-    """
-    DESCR: Create structure which keeps creature states and keeps track on active ones
-    RETURN: empty data structure for creature control
-    """
-
-    creatures = {count: 0, units:[]}
-
-    return creatures
-
-@_general_logger
-def eng_move_lighter_on_field(field: FieldBoard, moving_pattern: list) -> None:
-    """
-    DESCR: Method changes coordinates of object Lighter, imnitating it's movement around the field
-    ARGS:
-        - field: FieldBoard object with lighter within it.
-        - moving_pattern: Path of the lighter
-    """
-
-    lighter_pos = field.lighter.get_position()
-    for move in moving_pattern:
-        if lighter_pos == move:
-            logger.debug(f"Current coordinates of FieldBoard.Lighter at {id(field.lighter)} are {field.lighter.get_position()}, and matched with {moving_pattern.index(move)}'th fragment of moving pattern at {id(moving_pattern)}.")
-            ligter_new_pos = (moving_pattern.index(move) + 1) % len(moving_pattern)
-            logger.debug(f"New index of fragment from moving pattern at {id(moving_pattern)} is {ligter_new_pos}")
-            field.lighter.set_position(moving_pattern[ligter_new_pos][0], moving_pattern[ligter_new_pos][1])
-            logger.debug(f"New set of coordinates for FieldBoard.Lighter at {id(field.lighter)} is: {moving_pattern[ligter_new_pos]}")
-            break  # bad!
-
-    return None
-
-
-@_general_logger
 def eng_check_coordinates_withtin_field(field: FieldBoard, position: tuple) -> bool:
     """
     DESCR: check that given coordinates are within given boundaries.
@@ -232,8 +180,28 @@ def eng_check_unit_is_not_corpse(unit:UnitCorpse) -> bool:
     logger.debug(f"Unit {id(unit)} is not corpse.")
     return True
 
+
 @_general_logger
-def eng_fill_field(field: FieldBoard, pattern: list=None, field_mapping: dict) -> int:
+def eng_field_create(field_x: int, field_y: int, lighter_power: int, terrain_pattern: list=None) -> FieldBoard:
+    """
+    DESCR: Create field board of exact size and populate it with blocks of terrain
+    ARGS:
+        - field_x: horizontal field size
+        - field_y: vertical field size
+        - lighter_power: attached to field lighter's power
+    RETURN: exemplar of class FieldBoard, with initiated field and lighter
+    """
+
+    logger.debug(f"Creating field {field_x}X{field_y}")
+    instance = FieldBoard(field_x, field_y)
+
+    logger.debug(f"Adding lighter with power {lighter_power}.")
+    instance.set_lighter(Lighter(0, 0, lighter_power))
+
+    return instance
+
+@_general_logger
+def eng_field_fill(field: FieldBoard, pattern: list=None, field_mapping: dict) -> int:
     """
     DESCR: fills FieldBoard exemplar with ground blocks
     ARGS:
@@ -257,7 +225,43 @@ def eng_fill_field(field: FieldBoard, pattern: list=None, field_mapping: dict) -
     return blocks_count
 
 @_general_logger
-def eng_get_unit_view(field: FieldBoard, unit: UnitCorpse) -> list:
+def eng_field_populate(field: FieldBoard, creatures: list=None) -> None:
+
+    if creatures is None:
+        logger.info(f"Creatures list not passed ({id(creatures)}). Using default population scheme.")
+        creatures = [
+            Producens(0, 0),
+        ]
+
+    logger.info(f"Populating field {id(field)}.")
+    for unit in creatures:
+        field.add_creature(unit)
+
+    return None
+
+@_general_logger
+def eng_lighter_move_on_field(field: FieldBoard, moving_pattern: list) -> None:
+    """
+    DESCR: Method changes coordinates of object Lighter, imnitating it's movement around the field
+    ARGS:
+        - field: FieldBoard object with lighter within it.
+        - moving_pattern: Path of the lighter
+    """
+
+    lighter_pos = field.lighter.get_position()
+    for move in moving_pattern:
+        if lighter_pos == move:
+            logger.debug(f"Current coordinates of FieldBoard.Lighter at {id(field.lighter)} are {field.lighter.get_position()}, and matched with {moving_pattern.index(move)}'th fragment of moving pattern at {id(moving_pattern)}.")
+            ligter_new_pos = (moving_pattern.index(move) + 1) % len(moving_pattern)
+            logger.debug(f"New index of fragment from moving pattern at {id(moving_pattern)} is {ligter_new_pos}")
+            field.lighter.set_position(moving_pattern[ligter_new_pos][0], moving_pattern[ligter_new_pos][1])
+            logger.debug(f"New set of coordinates for FieldBoard.Lighter at {id(field.lighter)} is: {moving_pattern[ligter_new_pos]}")
+            break  # bad!
+
+    return None
+
+@_general_logger
+def eng_unit_get_view(field: FieldBoard, unit: UnitCorpse) -> list:
     """
     DESCR: Get subselection of field to represent unit point of view
     ARGS:
@@ -291,25 +295,22 @@ def eng_get_unit_view(field: FieldBoard, unit: UnitCorpse) -> list:
     return fov
 
 @_general_logger
-def eng_move_unit_on_field(creature) -> None:
+def eng_unit_move_on_field(creature) -> None:
     
 
     return None
 
 @_general_logger
-def eng_populate_field(field: FieldBoard, creatures: list=None) -> None:
+def eng_units_dict_create() -> dict:
+    """
+    DESCR: Create structure which keeps creature states and keeps track on active ones
+    RETURN: empty data structure for creature control
+    """
 
-    if creatures is None:
-        logger.info(f"Creatures list not passed ({id(creatures)}). Using default population scheme.")
-        creatures = [
-            Producens(0, 0),
-        ]
+    creatures = {count: 0, units:[]}
 
-    logger.info(f"Populating field {id(field)}.")
-    for unit in creatures:
-        field.add_creature(unit)
+    return creatures
 
-    return None
 
 @._general_logger
 def eng_get_euclidean_distance_between_blocks(self, block_1: Ground, block_2: Ground) -> float:
