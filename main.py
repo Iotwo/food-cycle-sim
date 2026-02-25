@@ -261,7 +261,7 @@ def eng_lighter_move_on_field(field: FieldBoard, moving_pattern: list) -> None:
     return None
 
 @_general_logger
-def eng_unit_add_to_field(field: FieldBoard, position: tuple, unit_type: str ,unit_registry: dict=None) -> None:
+def eng_unit_add_to_field(field: FieldBoard, position: tuple, unit_type: str ,unit_registry: dict=None) -> dict:
     """
     DESCR: Add unit of type UnitCorpse or descendants to field and update unit_registry
     ARGS:
