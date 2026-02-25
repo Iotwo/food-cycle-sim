@@ -261,6 +261,51 @@ def eng_lighter_move_on_field(field: FieldBoard, moving_pattern: list) -> None:
     return None
 
 @_general_logger
+def eng_unit_add_to_field(field: FieldBoard, position: tuple, unit_type: str ,unit_registry: dict=None) -> None:
+    """
+    DESCR: Add unit of type UnitCorpse or descendants to field and update unit_registry
+    ARGS:
+        - field: FieldBoard exemplar which map will be changed according to new unit position
+        - position: set of X and Y on field where unit will be spawned, unit exemplar will 
+                    also inherit X and Y
+        - unit_type: which type of unit will be spawned
+        - unit_registry: struct for units state keeping
+    """
+
+    logger.debug(f"Performing basic checks of passed arguments.")
+    if eng_check_coordinates_withtin_field(field, position) is False:
+        logger.warning(f"Passed position ({position}) was out of bounds. Aborting procedure.")
+        return None
+    logger.debug(f"Checks passed.")
+
+    logger.debug(f"Checking existance of units registry...")
+    if unit_registry is not None:
+        logger.debug(f"Units registry found at {id(unit_registry)}.")
+        logger.debug(f"Adding new unit to registry...")
+        if unit_type == UnitCorpse.__name__:
+            unit_registry["units"].append(UnitCorpse(position[0], position[1]))
+            unit_registry["units_count"] += 1
+            logger.debug(f"Unit of type {UnitCorpse.__name__} added to registry.")
+        elif unit_type == Producens.__name__:
+            unit_registry["units"].append(Producens(position[0], position[1]))
+            unit_registry["units_count"] += 1
+            logger.debug(f"Unit of type {Producens.__name__} added to registry.")
+        else:
+            pass
+        debug.logger(f"Unit registry at {id(unit_registry)} updated.")
+    else:
+        logger.warning(f"Unit registry not found. Units' states cannot be updated.")
+
+    logger.debug(f"Updating field...")
+    if eng_check_field_cell_not_occupied(field, position) is False:
+        logger.info(f"Position {position} at {id(field.field[position[1]][position[0]])} is occupied on field.")
+    else:
+        field.field[position[1]][position[0]].set_occupation(True)
+        logger.debug(f"Field state updated.")
+
+    return unit_registry
+
+@_general_logger
 def eng_unit_get_view(field: FieldBoard, unit: UnitCorpse) -> list:
     """
     DESCR: Get subselection of field to represent unit point of view
@@ -301,13 +346,14 @@ def eng_unit_move_on_field(creature) -> None:
     return None
 
 @_general_logger
-def eng_units_create_dict() -> dict:
+def eng_units_create_registry() -> dict:
     """
     DESCR: Create structure which keeps creature states and keeps track on active ones
     RETURN: empty data structure for creature control
     """
 
-    creatures = {count: 0, units:[]}
+    creatures = {units_count: 0, units:[]}
+    logger.debug(f"Created units registry at {id(creatures)}.")
 
     return creatures
 
