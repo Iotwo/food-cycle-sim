@@ -273,35 +273,34 @@ def eng_unit_add_to_field(field: FieldBoard, position: tuple, unit_type: str, un
     """
 
     logger.debug(f"Performing basic checks of passed arguments.")
-    if eng_check_coordinates_withtin_field(field, position) is False:
-        logger.warning(f"Passed position ({position}) was out of bounds. Aborting procedure.")
+    if unit_registry is None:
+        logger.info(f"Unit registry not found. Units' states cannot be updated.")
         return None
-    logger.debug(f"Checks passed.")
-
-    logger.debug(f"Checking existance of units registry...")
-    if unit_registry is not None:
-        logger.debug(f"Units registry found at {id(unit_registry)}.")
-        logger.debug(f"Adding new unit to registry...")
-        if unit_type == UnitCorpse.__name__:
-            unit_registry["units"].append(UnitCorpse(position[0], position[1]))
-            unit_registry["units_count"] += 1
-            logger.debug(f"Unit of type {UnitCorpse.__name__} added to registry.")
-        elif unit_type == Producens.__name__:
-            unit_registry["units"].append(Producens(position[0], position[1]))
-            unit_registry["units_count"] += 1
-            logger.debug(f"Unit of type {Producens.__name__} added to registry.")
-        else:
-            pass
-        debug.logger(f"Unit registry at {id(unit_registry)} updated.")
-    else:
-        logger.warning(f"Unit registry not found. Units' states cannot be updated.")
-
+    if eng_check_coordinates_withtin_field(field, position) is False:
+        logger.info(f"Passed position ({position}) was out of bounds. Aborting procedure.")
+        return None
     logger.debug(f"Updating field...")
     if eng_check_field_cell_not_occupied(field, position) is False:
         logger.info(f"Position {position} at {id(field.field[position[1]][position[0]])} is occupied on field.")
+        return None
+    logger.debug(f"Checks passed.")
+
+    logger.debug(f"Adding new unit to registry...")
+    if unit_type == UnitCorpse.__name__:
+        unit_registry["units"].append(UnitCorpse(position[0], position[1]))
+        unit_registry["units_count"] += 1
+        logger.debug(f"Unit of type {UnitCorpse.__name__} added to registry.")
+    elif unit_type == Producens.__name__:
+        unit_registry["units"].append(Producens(position[0], position[1]))
+        unit_registry["units_count"] += 1
+        logger.debug(f"Unit of type {Producens.__name__} added to registry.")
     else:
-        field.field[position[1]][position[0]].set_occupation(True)
-        logger.debug(f"Field state updated.")
+        pass
+    debug.logger(f"Unit registry at {id(unit_registry)} updated.")
+
+    logger.debug(f"Updating field state...")
+    field.field[position[1]][position[0]].set_occupation(True)
+    logger.debug(f"Field state updated.")
 
     return unit_registry
 
