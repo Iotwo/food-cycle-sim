@@ -261,7 +261,7 @@ def eng_lighter_move_on_field(field: FieldBoard, moving_pattern: list) -> None:
     return None
 
 @_general_logger
-def eng_unit_add_to_field(field: FieldBoard, position: tuple, unit_type: str ,unit_registry: dict=None) -> dict:
+def eng_unit_add_to_field(field: FieldBoard, position: tuple, unit_type: str, unit_registry: dict=None) -> dict:
     """
     DESCR: Add unit of type UnitCorpse or descendants to field and update unit_registry
     ARGS:
@@ -344,6 +344,21 @@ def eng_unit_move_on_field(creature) -> None:
     
 
     return None
+
+@_general_logger
+def eng_unit_remove_from_field(field: FieldBoard, position: tuple, unit_registry: dict=None) -> dict:
+     """
+    DESCR: Remove unit at given position from field and update unit_registry
+    ARGS:
+        - field: FieldBoard exemplar which map will be changed according to removed unit position
+        - position: set of X and Y on field where unit will be spawned, unit exemplar will 
+                    also inherit X and Y
+        - unit_registry: struct for units state keeping
+    """
+
+    return unit_registry
+
+
 
 @_general_logger
 def eng_units_create_registry() -> dict:
